@@ -35,8 +35,8 @@
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="index.php">Home <span class="sr-only">(current)</span></a></li>
-          <li class="dropdown">
+          <li><a href="index.php">Home <span class="sr-only">(current)</span></a></li>
+          <li class="dropdown active">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Projects <span class="caret"></span></a>
             <ul class="dropdown-menu">
               <li><a href="project_view.php">View Projects</a></li>
@@ -45,33 +45,62 @@
           </li>
           <li><a href="#">Tasks </a></li>
         </ul>
-
         <ul class="nav navbar-nav navbar-right">
           <li><a href="#">Account</a></li>
         </ul>
-      </div>
-      <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container-fluid -->
+      </div>  <!-- /.navbar-collapse -->
+    </div>  <!-- /.container-fluid -->
   </nav>
+
+
 <div class="container">
   <div class="row">
-    <div class="col col-sm-12 text-center">
-      <h1>Assignment 3 by Kaiser Ahmed</h1>
-      <p>
-         <br>
+    <h3>Delete Project</h3>
+    <?php
+    //  Includes Database connection settings
+    require_once('./includes/db_settings.php');
 
-        <br>
-        <a class="btn btn-success" href="project_view.php">View projects</a>
-        <a class="btn btn-primary" href="project_add.html">Add a new project</a>
-      </p>
-    </div>
+    // Connect database
+    $conn = new mysqli($hn, $un, $pw, $db);
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    if(isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']) && $_GET['id'] != NULL) {
+          // id index exists
+          $sql = "DELETE FROM projects WHERE id = '".$conn->real_escape_string($_GET['id'])."'";
 
+          //execute query
+        	if( $conn->query($sql) ){
+        	//if successful deletion
+            ?>
+            <p> Project deleted successfully!
+              <a class="btn btn-success" href="project_view.php">Back to projects.</a>
+            </p>
+            <?php
+        	}
+          else {
+        	//if there's a database problem
+            ?>
+            <p> Database Error: Unable to delete record.
+              <a class="btn btn-success" href="project_view.php">Back</a>
+            </p>
+            <?php
+        	}
+      }
+      else {
+        ?>
+        <p> Something went wrong! Please go back
+          <a class="btn btn-success" href="project_view.php">Back</a>
+        </p>
+        <?php
+      }
 
+       ?>
 
-  </div>
+  </div> <!-- row -->
+  </div> <!-- container -->
 
-</div>
 
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

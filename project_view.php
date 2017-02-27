@@ -29,16 +29,16 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-        <a class="navbar-brand" href="#">ToDo</a>
+        <a class="navbar-brand" href="index.php">ToDo</a>
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
-          <li class="dropdown">
+          <li ><a href="index.php">Home <span class="sr-only">(current)</span></a></li>
+          <li class="dropdown active" >
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Projects <span class="caret"></span></a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu" >
               <li><a href="project_view.php">View Projects</a></li>
               <li><a href="project_add.html">Add Project</a></li>
             </ul>
@@ -84,12 +84,11 @@
             <tbody>
 
               <?php
-              $host = 'www.it354.com';
-              $db = 'it354_students';
-              $user = 'it354_students';
-              $pass = 'steinway';
-              // Create connection
-              $conn = new mysqli($host, $user, $pass, $db);
+              //  Includes Database connection settings
+              require_once('./includes/db_settings.php');
+
+              // Connect database
+              $conn = new mysqli($hn, $un, $pw, $db);
               // Check connection
               if ($conn->connect_error) {
                   die("Connection failed: " . $conn->connect_error);
@@ -100,12 +99,12 @@
               $result = mysqli_query($conn, $sql)or die(mysqli_error());
               // print_r(mysqli_fetch_array($result));
 
-  
+
                 while ($row = mysqli_fetch_array($result)) {
                   echo '<tr>
                     <td align="center">
-                      <a class="btn btn-default"><em class="fa fa-pencil"></em></a>
-                      <a class="btn btn-danger"><em class="fa fa-trash"></em></a>
+                      <a class="btn btn-success" href="project_edit.php?id=' . $row['id'] . '"><em class="fa fa-pencil"></em></a>
+                      <a class="btn btn-danger" onclick="delete_user(' . $row['id'] . ' );" ><em class="fa fa-trash"></em></a>
                     </td>
                     <td class="hidden-xs">' . $row['id'] . '</td>
                     <td>' . $row['name'] . '</td>
@@ -156,6 +155,16 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+  	function delete_user( id ){
+  	  //prompt the user
+    	var answer = confirm('Are you sure to delete this project?');
+    	if ( answer ){ //if user clicked ok
+    	    //redirect to url with action as delete and id of the record to be deleted
+    	    window.location = 'project_delete.php?action=delete&id=' + id;
+    	}
+  	}
+</script>
 </body>
 
 </html>

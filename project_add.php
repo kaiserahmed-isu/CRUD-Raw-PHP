@@ -1,12 +1,17 @@
 <?php
-$hn = 'www.it354.com';
-$db = 'it354_students';
-$un = 'it354_students';
-$pw = 'steinway';
+
+//  Includes Database connection settings
+require_once './includes/db_settings.php';
+include_once './includes/functions.php';
+
+// Connect database
 $conn = new mysqli($hn, $un, $pw, $db);
+
+// check conntection
 if ($conn->connect_error) die($conn->connect_error);
-$name = $_POST["name"];
-$descript = $_POST['description'];
+
+$name = mysql_entities_fix_string($conn, $_POST["name"]);
+$descript = mysql_entities_fix_string($conn, $_POST['description']);
 
 $sql="INSERT INTO projects (name, description)
 VALUES('$name', '$descript')";
@@ -45,14 +50,14 @@ VALUES('$name', '$descript')";
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-        <a class="navbar-brand" href="#">ToDo</a>
+        <a class="navbar-brand" href="index.php">ToDo</a>
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
-          <li class="dropdown">
+          <li ><a href="index.php">Home <span class="sr-only">(current)</span></a></li>
+          <li class="dropdown active">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Projects <span class="caret"></span></a>
             <ul class="dropdown-menu">
               <li><a href="project_view.php">View Projects</a></li>
@@ -80,7 +85,8 @@ VALUES('$name', '$descript')";
   $conn->close();
 ?>
 
-  <button type="submit" class="btn btn-default" onclick="location.href='project_add.html'">Back</button>
+  <a class="btn btn-success" href="project_view.php">Back to projects.</a>
+  <button type="submit" class="btn btn-default" onclick="location.href='project_add.html'">Add another project</button>
 
 </div>
 
